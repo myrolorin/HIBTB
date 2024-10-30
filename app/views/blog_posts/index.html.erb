@@ -1,13 +1,7 @@
-<h1>How I Built This Blog</h1>
-<h3>Ramblings from an ADHD dad learning dev</h3>
-<br>
-
-<% @blog_posts.each do |blog_post| %>
-    <div>
-        <h2><%= blog_post.title %></h2>
-        <small><%= blog_post.created_at %></small>
-        <%= simple_format(blog_post.body) %>
-        <br>
-        <%= ("-" + blog_post.author) %>
-    </div>
-<% end %>
+<body>
+    <% @blog_posts.each do |post| %>
+        <h2><%= link_to post.title, blog_post_path(post) %></h2>
+        <p><%= post.created_at.strftime("%B %d, %Y") %></p>
+        <p><%= truncate(post.body, length: 150) %></p>
+    <% end %>
+</body>

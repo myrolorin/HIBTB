@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title><%= content_for(:title) || "Hibtb" %></title>
+    <title><%= content_for(:title).presence || "HIBTB" %></title>
     <meta name="viewport" content="width=device-width,initial-scale=1">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <%= csrf_meta_tags %>
@@ -15,9 +15,31 @@
     <link rel="apple-touch-icon" href="/icon.png">
     <%= stylesheet_link_tag "application", "data-turbo-track": "reload" %>
     <%= javascript_importmap_tags %>
+    <script data-goatcounter="https://myrolorin.goatcounter.com/count"
+        async src="//gc.zgo.at/count.js"></script>
+
+    <div class="header">
+      <h1>How I Built This Blog</h1>
+      <h3>Ramblings from an ADHD dad learning dev</h3>
+    </div>
+    <div class="nav">
+      <%= link_to "Home", root_path %>
+      <% if current_user %>
+        <%= link_to current_user.username, user_path(current_user) %>
+        <%= link_to "Log Out", logout_path, method: :delete %>
+      <% else %>
+        <%= link_to "Log In", login_path %>
+        <%= link_to "Sign Up", new_user_path %>
+      <% end %>
+    </div>
   </head>
 
   <body>
+    <% flash.each do |type, msg| %>
+      <div>
+        <%= msg %>
+      </div>
+    <% end %>
     <%= yield %>
   </body>
 </html>
