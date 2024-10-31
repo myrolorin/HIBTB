@@ -1,0 +1,33 @@
+name: Staging Deployment
+on:
+  pull_request:
+    types: [opened, reopened, synchronize, closed]
+
+env:
+  FLY_API_TOKEN: ${{ secrets.FLY_API_TOKEN }}
+  APP_NAME: pr-${{ github.event.number }}-hibtb
+
+jobs:
+  deploy:
+    name: Deploy staging app
+    runs-on: ubuntu-latest
+    if: github.event.action != 'closed'
+    steps:
+      - uses: actions/checkout@v3
+      - uses: superfly/flyctl-actions/setup-flyctl@master
+      - name: Deploy to Fly.io
+        run: flyctl deploy --remote-only --app ${{ env.APP_NAME }}
+      - name: Create staging database
+        run: flyctl postgres create --name ${{ env.APP_NAME }}-db || true
+      - name: Connect app to database
+        run: flyctl postgres attach ${{ env.APP_NAME }}-db --app ${{ env.APP_NAME }}
+    
+  cleanup:
+    if: github.event.action == 'closed'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: superfly/flyctl-actions/setup-flyctl@master
+      - name: Remove staging app
+        run: flyctl apps destroy ${{ env.APP_NAME }} --yes || true
+      - name: Remove staging database
+        run: flyctl postgres destroy ${{ env.APP_NAME }}-db --yes || true
