@@ -1,7 +1,15 @@
-<body>
-    <% @blog_posts.each do |post| %>
-        <h2><%= link_to post.title, blog_post_path(post) %></h2>
-        <p><%= post.created_at.strftime("%B %d, %Y") %></p>
-        <p><%= truncate(post.body, length: 150) %></p>
+<head>
+    <% content_for :title do %>
+        HIBTB - Home
     <% end %>
+</head>
+
+<body>
+    <div class='blog_index'>
+        <% @blog_posts.each do |post| %>
+            <h2><%= link_to post.title, blog_post_path(post), class: 'index_title' %></h2>
+            <p><%= post.user.username + ' - ' + post.created_at.strftime("%B %d, %Y") %></p>
+            <p><%= truncate(post.body, length: 150) %></p>
+        <% end %>
+    <div>
 </body>

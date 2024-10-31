@@ -18,8 +18,8 @@
   </div>
 
   <div class="field">
-    <%= form.label :content %>
-    <%= form.text_area :content %>
+    <%= form.label :body %>
+    <%= form.text_area :body %>
   </div>
 
   <div class="actions">
@@ -27,5 +27,4 @@
   </div>
 <% end %>
 
-<%= link_to 'Show', @blog_post %> |
-<%= link_to 'Back', blog_posts_path %>
+<%= link_to 'Back', blog_posts_path, class: 'btn btb-form' %>
