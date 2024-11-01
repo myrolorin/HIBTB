@@ -1,0 +1,23 @@
+<head>
+    <% content_for :title do %>
+        HIBTB - <%= @blog_post.title %>
+    <% end %>
+</head>
+
+<body>
+    <h1><%= @blog_post.title %></h1>
+    <h3><%= ('- ' + @blog_post.user.username) %></h3>
+    <small><%= @blog_post.created_at.strftime("%B %d, %Y") %></small>
+    <div><%= simple_format(@blog_post.body) %></div>
+    <%= link_to "Back to All Posts", blog_posts_path %>
+
+    <% if current_user&.admin? %>
+        <%= link_to 'Edit', edit_blog_post_path(@blog_post) %>
+        <%= link_to 'Delete', blog_post_path(@blog_post), 
+                    data: { turbo_method: :delete, turbo_confirm: 'Are you sure?' } %>
+    <% end %>
+
+    <% if current_user&.admin? %>
+        <%= link_to 'New Blog Post', new_blog_post_path %>
+    <% end %>
+</body>
