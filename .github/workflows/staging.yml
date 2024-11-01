@@ -15,6 +15,8 @@ jobs:
     steps:
       - uses: actions/checkout@v3
       - uses: superfly/flyctl-actions/setup-flyctl@master
+      - name: Create staging instance
+        run: flyctl apps create ${{ env.APP_NAME }} || true
       - name: Deploy to Fly.io
         run: flyctl deploy --remote-only --app ${{ env.APP_NAME }}
       - name: Create staging database
